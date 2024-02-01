@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Textverständnis und Argumentation</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/main.css') }}">
+  </head>
+  <body>
+    <div class="page-width">
+      <div class="one-line-container">
+        <div class="left-container push-up">
+          <div class="title">
+            AKILAS-NLP
+          </div>
+          <div class="subtext">
+            Gefördert vom Bundesministerium
+            <br>
+            für Bildung und Forschung
+          </div>
+        </div>
+        <div class="centered-container">
+          <h1>Textverständnis und Argumentation</h1>
+        </div>
+        <div class="right-container">
+          <img src="{{ url_for('static', filename='img/up_logo.svg') }}" alt="UP-Logo">
+        </div>
+      </div>
+
+      <form id="user_input_form" action="/feedback" method="post">
+
+        <!-- select topic -->
+        <div class="blue-background">
+          <table class="table-structure">
+            <tr>
+              <th colspan="2" class="prompt-text">Bitte wähle ein Thema aus und lies dir den zugehörigen Zeitungsartikel durch.</th>
+            </tr>
+            <tr>
+              <td><input type="radio" id="twitter-topic" name="topic" value="1" {% if topic == '1' %}checked{% endif %} checked required></td>
+              <td><a href="#" onclick="selectRadioButton('twitter-topic', 'https://www.zeit.de/digital/internet/2011-06/twitter-unterricht/komplettansicht'); return false;">Twitter-Unterricht (Zeit Online)</a></td>
+            </tr>
+            <tr>
+              <td><input type="radio" id="lateschool-topic" name="topic" value="2" {% if topic == '2' %}checked{% endif %} required></td>
+              <td><a href="#" onclick="selectRadioButton('lateschool-topic', 'https://www.aerztezeitung.de/Panorama/Ist-es-vernuenftig-die-Schule-um-8-zu-beginnen-402238.html'); return false;">Schulbeginn um 8 Uhr sinnvoll? (ÄrzteZeitung Online)</a></td>
+            </tr>
+            <tr>
+              <td><input type="radio" id="climate-topic" name="topic" value="3" {% if topic == '3' %}checked{% endif %} required></td>
+              <td><a href="#" onclick="selectRadioButton('climate-topic', 'https://www.zeit.de/gesellschaft/schule/2020-01/klimawandel-schulfach-bildung-unterricht-konkurrenz'); return false;">Nicht noch ein neues Schulfach (Zeit Online)</a></td>
+            </tr>
+          </table>
+        </div>
+        <br>
+
+        <!-- task 1 -->
+        <div class="centered-container">
+          <div class="orange-background">
+            <h2>Aufgabe 1: Textverständnis</h2>
+            Bitte beantworte folgende Verständnisfragen.
+          </div>
+        </div>
+        <br>
+
+        <!-- question 1 -->
+        <div class="questions-block">
+          <div class="input-prompt-question-container">
+            1. Was ist das Thema/Streitthema?
+            <br>
+            <textarea class="rounded-textarea-answer" wrap="off" id="question_1_input" name="question_1_input" rows="4" cols="90">{% if question_1_input %}{{ question_1_input }}{% endif %}</textarea>
+            <br>
+            {% if answer_feedback_list %}
+              Feedback zu deiner Antwort zu Frage 1:
+              <br>
+              {% for sent in answer_feedback_list[0] %}
+                {{ sent }}
+                <br>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <br style="line-height: 50px;">
+
+          <!-- question 2 -->
+          <div class="input-prompt-question-container">
+            2. Was ist der im Artikel vertretene Standpunkt?
+            <br>
+            (Falls das Thema "Schulbeginn um 8 Uhr sinnvoll?" ausgewählt wurde, kann diese Frage ignoriert werden, da der Artikel nicht darauf eingeht.)
+            <br>
+            <textarea class="rounded-textarea-answer" wrap="off" id="question_2_input" name="question_2_input" rows="4" cols="90">{% if question_2_input %}{{ question_2_input }}{% endif %}</textarea>
+            <br>
+            {% if answer_feedback_list %}
+              Feedback zu deiner Antwort zu Frage 2:
+              <br>
+              {% for sent in answer_feedback_list[1] %}
+                {{ sent }}
+                <br>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <br style="line-height: 50px;">
+
+          <!-- question 3 -->
+          <div class="input-prompt-question-container">
+            3. Was spricht FÜR den im Artikel vertretenen Standpunkt? Welche Pro-Argumente werden genannt?
+            <br>
+            <textarea class="rounded-textarea-answer" wrap="off" id="question_3_input" name="question_3_input" rows="4" cols="90">{% if question_3_input %}{{ question_3_input }}{% endif %}</textarea>
+            <br>
+            {% if answer_feedback_list %}
+              Feedback zu deiner Antwort zu Frage 3:
+              <br>
+              {% for sent in answer_feedback_list[2] %}
+                {{ sent }}
+                <br>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <br style="line-height: 50px;">
+
+          <!-- question 4 -->
+          <div class="input-prompt-question-container">
+            4. Was spricht GEGEN den im Artikel vertretenen Standpunkt? Welche Contra-Argumente werden genannt?
+            <br>
+            <textarea class="rounded-textarea-answer" wrap="off" id="question_4_input" name="question_4_input" rows="4" cols="90">{% if question_4_input %}{{ question_4_input }}{% endif %}</textarea>
+            <br>
+            {% if answer_feedback_list %}
+              Feedback zu deiner Antwort zu Frage 4:
+              <br>
+              {% for sent in answer_feedback_list[3] %}
+                {{ sent }}
+                <br>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        <br style="line-height: 50px;">
+
+        <!-- task 2 -->
+        <div class="centered-container">
+          <div class="orange-background">
+            <h2>Aufgabe 2: Argumentation</h2>
+            Bitte schreibe eine kurze Erörterung zu deinem ausgewählten Text.
+            <br>
+            Der Text kann eingetippt/einkopiert oder als txt-Datei hochgeladen werden.
+          </div>
+        </div>
+
+        <!-- select segmentation option -->
+        <div class="centered-container">
+          <div class="blue-background">
+            Bitte wähle eine Option für die Analyse.
+            <label>
+              <input type="radio" name="segmentation" id="without-segmentation" value="0" {% if segmentation == '0' %}checked{% endif %} checked>
+              Analyse mit Textsegmentierung in Sätze
+            </label>
+            <label>
+              <input type="radio" name="segmentation" id="with-segmentation" value="1" {% if segmentation == '1' %}checked{% endif %}>
+              Analyse mit Textsegmentierung in feinere Einheiten (mit längeren Ladezeiten - ca. 5 min für 700 Wörter)
+            </label>
+          </div>
+        </div>
+
+        <!-- hint for user -->
+        <div class="blue-background">
+          Tipp: Du kannst mehrere Erörterungen schreiben und gleichzeitig evaluieren lassen. Lasse dafür zwischen den Texten genau eine Leerzeile frei, damit sie als einzelne Texte evaluiert werden.
+          <br>
+          Für Absatzgrenzen kann <span class="bold-text">&lt;PB&gt;</span> benutzt werden.
+          <br>
+          <br>
+          Beispiel:
+          <pre>
+              Dies ist der erste Satz der ersten Erörterung. Ein weiterer Satz folgt.
+              &lt;PB&gt; Dies ist der nächste Absatz der ersten Erörterung.
+
+
+              Nun fängt die zweite Erörterung an. Dies ist ein weiterer Satz.
+              Dies ist immer noch Teil des ersten Absatzes der zweiten Erörterung.
+          </pre>
+        </div>
+
+        <!-- legend -->
+        {% if essay_list %}
+          <div class="one-line-container blue-background">
+            <div class="left-container">
+              <table>
+                <tr>
+                  <td>Legende:</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><u><h3>Inhaltszonen</h3></u></td>
+                  <td><u><h3>Attribution</h3></u></td>
+                </tr>
+                <tr>
+                  <td><span class="info_article_topic essay-font">Einleitung</span></td>
+                  <td><span class="source essay-font">Quelle</span></td>
+                </tr>
+                <tr>
+                  <td><span class="own essay-font">Eigene Meinung</span></td>
+                  <td><span class="cue essay-font">Signal</span></td>
+                </tr>
+                <tr>
+                  <td><span class="article_pro essay-font">Pro aus dem Text</span></td>
+                  <td><span class="content essay-font">Meinung</span></td>
+                </tr>
+                <tr>
+                  <td><span class="article_con essay-font">Contra aus dem Text</span></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><span class="other essay-font">Sonstiges</span></td>
+                  <td></td>
+                </tr>
+              </table>
+            </div>
+            <div class="legend-description">
+              Nach der Analyse deiner Erörterung werden verschiedene Elemente markiert, zum einen sind das Inhaltszonen und zum anderen Attributionen. <b>Inhaltszonen</b> werden pro Satz ermittelt und geben die Funktion des Satzes für die Argumentation an. Zum Beispiel gibt es die Einleitung, die in das Thema einführt, die eigene Meinung, oder die Pro- und Contra-Argumente aus dem Artikel, die verschiedene Seiten des Themas aufzeigen.
+              Hingegen werden <b>Attributionen</b> von Meinungen innerhalb der Sätze ermittelt. Es wird die Meinung selbst bestimmt, ihre Quelle und zusätzlich noch die Formulierungen, die diese Attribution anzeigen.
+            </div>
+          </div>
+        {% endif %}
+        <br>
+
+        <!-- essay title -->
+        <p>
+          {% for essay in essay_list %}
+            {% if essay_list|length > 1 %}
+              <br>
+              <div class="title">Essay {{ loop.index }}</div>
+            {% endif %}
+            {% for sentence in essay %}
+              {% if sentence[0][1] != "[FEEDBACK]" %}
+                {{ loop.index }}
+              {% endif %}
+              {% for token, content_zone_label, attribution_label in sentence %}
+                <!-- feedback -->
+                {% if content_zone_label == "" %}
+                  <br style="line-height: 10px;">
+                  <div class="feedback-text">{{ token }}</div>
+                  <br style="line-height: 20px;">
+                <!-- essay -->
+                {% else %}
+                  <span class="{{ content_zone_label }} {{attribution_label}} essay-font">{{ token }}</span>
+                {% endif %}
+              {% endfor %}
+              <br>
+            {% endfor %}
+          {% endfor %}
+        </p>
+
+        <div class="centered-container">
+          <label for="essay_text_input" class="input-prompt-essay">Du kannst entweder den Text eingeben/einkopieren...</label>
+          <textarea class="rounded-textarea-essay" id="essay_text_input" name="essay_text_input" rows="20" cols="100">{% if text %}{{ text }}{% endif %}</textarea>
+          <br style="line-height: 200px;">
+          <label for="essay_file_input" class="input-prompt-essay">... oder eine txt-Datei hochladen.</label>
+          <input type="file"
+                 id="essay_file_input" name="essay_file_input" accept="text/plain"
+                 placeholder="Durchsuchen" class="file-input">
+        </div>
+        <br>
+        <div class="fixed-button">
+          <input type="submit" value="FEEDBACK GENERIEREN" id="feedback">
+        </div>
+      </form>
+      <br style="line-height: 10px;">
+
+    </div>
+    <script src="{{ url_for('static', filename='js/utilities.js') }}"></script>
+  </body>
+</html>
